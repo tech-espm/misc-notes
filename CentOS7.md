@@ -209,15 +209,27 @@ CREATE USER 'nome-do-usuario'@'localhost' IDENTIFIED BY 'senha-do-usuario';
 
 Conceder permissões ao usuário novo somente a esse banco de dados
 ```SQL
+GRANT ALL PRIVILEGES ON nome-do-banco.* TO 'nome-do-usuario'@'localhost';
+```
+
+Se quiser limitar apenas para as permissões comuns
+```SQL
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON nome-do-banco.* TO 'nome-do-usuario'@'localhost';
 ```
 
-Para evitar qualquer problema de conexão remota, como Node.js ou .Net
+> Toda vez que uma tabela/view/etc for criada pelo root, ou por outro usuário que não o usuário `nome-do-usuario`, será preciso executar o comando `GRANT` acima, ou ocorrerão erros na hora do usuário tentar logar/acessar!
+
+Caso ocorra algum problema de conexão remota utilizando Node.js, .Net ou outra linguagem/framework
 ```SQL
 ALTER USER 'nome-do-usuario'@'localhost' IDENTIFIED WITH mysql_native_password BY 'senha-do-usuario';
 ```
 
-> Toda vez que uma tabela/view/etc for criada, será preciso executar o comando `GRANT` acima, ou ocorrerão erros na hora do usuário tentar logar/acessar!
+Para restaurar um arquivo de dump no formato `.sql`, basta criar o banco e o usuário utilizando os comandos acima, copiar o arquivo de dump, por exemplo `dump.sql`, para um diretório do servidor, ir até o diretório e executar o comando abaixo
+```bash
+mysql -u nome-do-usuario -p nome-do-banco < dump.sql
+```
+
+> Dependendo dos comandos utilizados dentro do arquivo de dump, antes de executar o dump será necessário executar `GRANT ALL PRIVILEGES` em vez da versão apenas com permissões comuns.
 
 ---
 
@@ -287,6 +299,7 @@ sudo chmod -R 755 /var/www
 
 Permissões
 ==========
+
 ```
 Read (r)    4
 Write (w)   2 
