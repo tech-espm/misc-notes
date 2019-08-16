@@ -336,9 +336,11 @@ Antes de fazer deploy de qualquer aplicação, é preciso instalar o `PM2`, que 
 sudo npm install -g pm2@latest
 ```
 
-Fazer com que o PM2 inicie automaticamente
+Fazer com que o PM2 inicie automaticamente (deve configurar corretamente o usuário e o diretório inicial)
+
+http://pm2.keymetrics.io/docs/usage/startup/
 ```bash
-sudo pm2 startup systemd
+sudo pm2 startup systemd -u apache --hp /home/nome-do-usuario
 ```
 
 Para listar aplicações Node registradas/executando
@@ -346,9 +348,10 @@ Para listar aplicações Node registradas/executando
 pm2 list
 ```
 
-Para iniciar uma aplicação e já adicioná-la à lista de aplicações gerenciadas (deve executar esse comando dentro do diretório onde está o arquivo app.js)
+Para iniciar uma aplicação e já adicioná-la à lista de aplicações gerenciadas (deve executar esse comando dentro do diretório onde está o arquivo app.js, e ajustar o usuário corretamente)
 ```bash
-pm2 start app.js --name nome-do-app
+pm2 start app.js -u apache --name nome-do-app
+pm2 save
 ```
 
 Para reiniciar uma aplicação
