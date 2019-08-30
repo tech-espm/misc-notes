@@ -291,7 +291,7 @@ sudo chown -R apache /var/www/teste.com.br/log
 ```
 
 Para garantir que as permissões estejam corretas
-```bahs
+```bash
 sudo chmod -R 755 /var/www
 ```
 
@@ -336,21 +336,31 @@ Antes de fazer deploy de qualquer aplicação, é preciso instalar o `PM2`, que 
 sudo npm install -g pm2@latest
 ```
 
-Fazer com que o PM2 inicie automaticamente (deve configurar corretamente o usuário e o diretório inicial)
+Para evitar que o PM2 seja executado com qualquer usuário, é interessante criar um usuário específico, sob o qual as aplicações serão executadas (aqui o usuário é pm2, com a home do usuário definida para /home/pm2, diretório que será criado durante o processo)
+```bash
+sudo useradd -d /home/pm2 -m -s /bin/bash pm2
+sudo passwd pm2
+```
+
+Fazer com que o PM2 inicie automaticamente (deve configurar corretamente o usuário e o diretório inicial, que aqui serão os mostrados acima, lembrando que o segundo `pm2` no nome do serviço `pm2-pm2` é na verdade o nome do usuário criado, que no caso também é `pm2`)
 
 http://pm2.keymetrics.io/docs/usage/startup/
 ```bash
-sudo pm2 startup systemd -u apache --hp /home/nome-do-usuario
+sudo pm2 startup systemd --user pm2 --hp /home/pm2
+sudo systemctl enable pm2-pm2
+sudo systemctl start pm2-pm2
 ```
 
-Para listar aplicações Node registradas/executando
+Para cada aplicação a ser adicionada, assim como ocorre com o Apache, deve-se configurar as permissões dos diretórios/arquivos que serão utilizados pelas aplicações Node gerenciadas pelo PM2
 ```bash
-pm2 list
+sudo chown -R pm2 /var/www/nome-do-app
+sudo chmod -R 755 /var/www/nome-do-app
 ```
 
 Para iniciar uma aplicação e já adicioná-la à lista de aplicações gerenciadas (deve executar esse comando dentro do diretório onde está o arquivo app.js, e ajustar o usuário corretamente)
 ```bash
-pm2 start app.js -u apache --name nome-do-app
+cd /var/www/nome-do-app
+pm2 start app.js --name nome-do-app
 pm2 save
 ```
 
@@ -358,6 +368,29 @@ Para reiniciar uma aplicação
 ```bash
 pm2 restart nome-do-app --update-env
 ```
+
+Para listar aplicações Node registradas/executando
+```bash
+pm2 list
+```
+
+> ATENÇÃO!
+>
+> Os comandos `pm2 start`, `pm2 restart` *devem* ser executados pelo usuário desejado, que no caso desse exemplo é o usuário `pm2`, pois as opções `-u`, `--user` e afins foram descontinuadas!
+>
+> O comando `pm2 save` também deve ser executado pelo usuário desejado, caso contrário o arquivo de dump gerado será salvo no diretório errado, e não será lido corretamente durante a inicialização! O caminho do arquivo de dump é salvo é `~/.pm2/dump.pm2`, que no caso do exemplo é `/home/pm2/.pm2/dump.pm2`.
+>
+> Executar comandos como `pm2 start`, ou até mesmo `pm2 list`, utilizando outro usuário que não o usuário desejado, no caso do exemplo, `pm2`, fará com que uma nova instância do daemon do PM2 seja executada, não mostrando a situação real.
+>
+> Assim, para facilitar o processo todo e vitar confusão, convém efetuar o login via SSH como o usuário desejado (`pm2`) e executar as tarefas relacionadas ao PM2 apenas através desse usuário!
+
+Mais documentação sobre o PM2
+
+http://pm2.keymetrics.io/docs/usage/quick-start/
+
+http://pm2.keymetrics.io/docs/usage/memory-limit/
+
+http://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
 
 ---
 
