@@ -341,3 +341,27 @@ Operadores booleanos
 And ' Combina dois resultados booleanos utilizando a lógica E
 Or  ' Combina dois resultados booleanos utilizando a lógica OU
 ```
+
+Acessando valores das células da planilha atual
+-----------------------------------------------
+
+```vb
+Dim x As Long
+Dim y As Double
+Dim z As String
+
+x = ActiveSheet.Cells(1, 1).Value ' Armazena o conteúdo de A1 em x, como um número inteiro
+y = ActiveSheet.Cells(2, 1).Value ' Armazena o conteúdo de A2 em y, como um número real
+z = ActiveSheet.Cells(3, 1).Value ' Armazena o conteúdo de A3 em z, como texto
+
+' Durante a leitura, ocorrerá um erro se o dado da célula não puder ser convertido para o tipo desejado.
+' Isso não ocorre durante a escrita, pois as células aceitam qualquer tipo de valor!
+
+ActiveSheet.Cells(1, 2).Value = x ' Armazena o valor da variável x em B1
+ActiveSheet.Cells(2, 2).Value = y ' Armazena o valor da variável y em B2
+ActiveSheet.Cells(3, 2).Value = z ' Armazena o valor da variável z em B3
+```
+
+> O objeto `ActiveSheet` pode ser omitido se o código estiver sendo executado na própria planilha e não em um módulo.
+>
+> Durante a leitura, se existir dúvida quanto ao tipo de dados presente nas células, é recomendável utilizar as funções de conversão mostradas anteriormente, como `CLng()` ou `CDbl()`.
