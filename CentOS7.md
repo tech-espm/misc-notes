@@ -364,6 +364,17 @@ pm2 start app.js --name nome-do-app
 pm2 save
 ```
 
+Caso fosse necessário realizar um balanceamento de carga, subindo mais de uma instância da mesma aplicação, poderia ser utilizada a opção `-i x` com `x` valendo
+- `0` ou `max`: para criar uma instância para cada CPU do sistema
+- `-1`: para criar uma instância para cada CPU do sistema, exceto uma CPU
+- `número`: para criar uma quantidade específica de instâncias
+
+```bash
+cd /var/www/nome-do-app
+pm2 start app.js --name nome-do-app -i x
+pm2 save
+```
+
 Para reiniciar uma aplicação
 ```bash
 pm2 restart nome-do-app --update-env
