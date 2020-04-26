@@ -69,6 +69,10 @@ Se algum dia precisar utilizar alguma classe do assembly `System.Drawing.Common`
 ```bash
 sudo yum install libgdiplus
 ```
+Caso a biblioteca `libgdiplus` não seja encontrada, será necessário instalar o `epel-release` antes:
+```bash
+sudo yum install epel-release
+```
 
 Listar portas e serviços abertos
 ```bash
