@@ -11,6 +11,16 @@ Listar programas atribuídos à portas abertas
 netstat -tulnp
 ```
 
+Listar uso de memória RAM e CPU por processo
+```bash
+top
+```
+
+Visão simplificada da memória RAM, em MB
+```bash
+free -m
+```
+
 ---
 
 Inicialização geral do ambiente em um CentOS 7
