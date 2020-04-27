@@ -89,6 +89,13 @@ Listar portas e serviços abertos
 sudo firewall-cmd --list-all
 ```
 
+Caso o comando `firewall-cmd` não seja encontrado, será preciso instalar, iniciar e habilitar o início automático do serviço:
+```bash
+sudo yum install firewalld
+sudo systemctl start firewalld
+sudo systemctl enable firewalld
+```
+
 Liberar a porta 80 e 443
 ```bash
 sudo firewall-cmd --add-service=http --permanent
