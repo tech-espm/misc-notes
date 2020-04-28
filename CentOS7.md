@@ -245,6 +245,11 @@ Caso ocorra algum problema de conexão remota utilizando Node.js, .Net ou outra 
 ALTER USER 'nome-do-usuario'@'localhost' IDENTIFIED WITH mysql_native_password BY 'senha-do-usuario';
 ```
 
+Para criar um arquivo de dump no formato `.sql`, basta executar o comando abaixo
+```bash
+mysqldump -u nome-do-usuario -p nome-do-banco > dump.sql
+```
+
 Para restaurar um arquivo de dump no formato `.sql`, basta criar o banco e o usuário utilizando os comandos acima, copiar o arquivo de dump, por exemplo `dump.sql`, para um diretório do servidor, ir até o diretório e executar o comando abaixo
 ```bash
 mysql -u nome-do-usuario -p nome-do-banco < dump.sql
