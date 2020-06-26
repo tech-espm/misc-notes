@@ -603,8 +603,13 @@ Sub-domínio redirecionando para o Node
 <VirtualHost teste.com.br:80>
     ProxyPreserveHost On
 
-    ProxyPass / http://127.0.0.1:3000 retry=0
-    ProxyPassReverse / http://127.0.0.1:3000
+    # Se fosse o caso da raiz, aí deve-se colocar a barra ao final!
+    # A regra é: se a string à esquerda termina com uma barra, a da
+    # direita deve terminar com uma barra, também; e se a da esquerda
+    # não termina com uma barra, a da direita também não deve terminar
+    # com uma barra!
+    ProxyPass / http://127.0.0.1:3000/ retry=0
+    ProxyPassReverse / http://127.0.0.1:3000/
 
     ServerName teste.com.br
 </VirtualHost>
