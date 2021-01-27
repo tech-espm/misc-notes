@@ -620,9 +620,35 @@ Pasta virtual redirecionando para o Node, mas servindo arquivos estáticos diret
 <VirtualHost *:80>
     ProxyPreserveHost On
 
+    # Habilitando compressão conforme o tipo da resposta (vai valer
+    # tanto para os arquivos estáticos, como para as respostas geradas
+    # dinamicamente pelo Node.js)
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+
+    # Definindo cabeçalhos específicos para um diretório
+    <Directory /var/www/teste.com.br/html>
+        Header Set Cache-Control "public,max-age=31536000"
+        Header Unset ETag
+        FileETag None
+    </Directory>
+
     Alias "/teste/public" "/var/www/teste.com.br/html"
     # A ordem dos ProxyPass é importante!!!
-    # ProxyPass /teste/public !    fará com que tudo que começar por
+    # ProxyPass /teste/public ! fará com que tudo que começar por
     # /teste/public não seja encaminhado para o proxy
     # https://stackoverflow.com/a/35928307/3569421
     ProxyPass /teste/public !
