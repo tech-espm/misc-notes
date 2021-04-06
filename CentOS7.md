@@ -188,6 +188,8 @@ Atualizar o repositório
 sudo rpm -ivh mysql80-community-release-el7-3.noarch.rpm
 ```
 
+> Para o CentOS 8, utilizar `mysql80-community-release-el8-1.noarch.rpm`.
+
 Instalar o MySQL
 ```bash
 sudo yum install mysql-server
@@ -206,6 +208,11 @@ sudo systemctl enable mysqld
 Mostrar na tela a senha padrão gerada para o usuário root
 ```bash
 sudo grep 'temporary password' /var/log/mysqld.log
+```
+
+Se der errado, ou aparecer vazio, basta alterar a senha do usuário root manualmente
+```bash
+/usr/bin/mysqladmin -u root password 'nova-senha-do-root'
 ```
 
 Executar o script para terminar a instalação com segurança (quando pedir a senha atual do root, coloca a senha listada acima, depois escolhe uma senha nova para o root)
